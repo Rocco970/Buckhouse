@@ -96,7 +96,7 @@
                <th>City</th>
                <th>Number of Videos</th>
             </tr>
-            <tr ng-repeat="data in allData | filter : search">
+            <tr ng-repeat="data in allData | filter : search" onclick="tableRowClick(this)">
                <td>
                   <i ng-show="data.videos.length>0" class="fa fa-check-square"></i> 
                   <i ng-show="data.videos.length===0" class="fa fa-square"></i>
@@ -109,123 +109,106 @@
                <!-- <td>{{data.videos}}</td> -->
             </tr>
          </table>
->>>>>>> added resort visit count
+>>>>>>> Added panning to corresponding resort when clicking on table row
       </div>
 
-                  <div class="navbar navbar-default navbar-fixed-bottom">
-                          <p class="navbar-text pull-left">Subscribe to Johnathan on 
-                               <a href="https://www.youtube.com/c/JohnathanBuckhouse" target="_blank">YouTube</a>
-                          </p>
-                          <p class="navbar-text pull-right">Site Built by 
-                              <a href="https://www.youtube.com/c/KennyShellnut" target="_blank">Kenny</a>
-                         </p>
-                    </div>
+      <div class="navbar navbar-default navbar-fixed-bottom">
+               <p class="navbar-text pull-left">Subscribe to Johnathan on 
+                     <a href="https://www.youtube.com/c/JohnathanBuckhouse" target="_blank">YouTube</a>
+               </p>
+               <p class="navbar-text pull-right">Site Built by 
+                  <a href="https://www.youtube.com/c/KennyShellnut" target="_blank">Kenny</a>
+               </p>
+         </div>
                     
    </body>
    <script>
 
-      // Code goes here
-      var app = angular.module('myApp', []);
-      
-      // Governing app controller
-      app.controller('myCtrl', ['$scope', function($scope) {
-         // Assign the data to the view
-          $scope.allData = JSON.parse(JSON.stringify(allData));
-          $scope.visitedCount = allData.filter(val => val.videos.length > 0).length;
-          $scope.lastUpdated = '01/11/2021';
-      }]);
+   // Code goes here
+   var app = angular.module('myApp', []);
+   
+   // Governing app controller
+   app.controller('myCtrl', ['$scope', function($scope) {
+      // Assign the data to the view
+         $scope.allData = JSON.parse(JSON.stringify(allData));
+         $scope.visitedCount = allData.filter(val => val.videos.length > 0).length;
+         $scope.lastUpdated = '01/11/2021';
+   }]);
 
-      // Set the default view
-      var defaultCoordinates = [39.480243, -106.06667]; // breckenridge coords
-      var defaultZoom = 4;
-      var mymap = L.map('mapid').setView(defaultCoordinates, defaultZoom);
+   // Set the default view
+   var defaultCoordinates = [39.480243, -106.06667]; // breckenridge coords
+   var defaultZoom = 4;
+   var mymap = L.map('mapid').setView(defaultCoordinates, defaultZoom);
 
-      // Copyright information
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-        maxZoom: 18,
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-          'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox/streets-v11',
-        tileSize: 512,
-        zoomOffset: -1
-      }).addTo(mymap);
+   // Copyright information
+   L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
+         'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1
+   }).addTo(mymap);
 
-      // Green Icon (visited)
-      var greenIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });
+   // Green Icon (visited)
+   var greenIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+   });
 
-      // Red Icon (not yet visited)
-      var redIcon = new L.Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });
+   // Red Icon (not yet visited)
+   var redIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+   });
 
-      var visitedCount = 0;
+   var visitedCount = 0;
 
-<<<<<<< HEAD
-        // Assign the icon color (visited or not)   
-        var icon = allData[i].videos.length > 0 ? greenIcon : redIcon;
+      // Assign the icon color (visited or not)   
+      var icon = allData[i].videos.length > 0 ? greenIcon : redIcon;
 
-        // Generate the video link html
-        var videoLinks;
-        if (allData[i].videos.length === 0) {
-          videoLinks = `<p>Johnathan hasn't traveled here yet! Check back soon</p>`;
-        }
-        else if (allData[i].videos.length === 1) {
-          videoLinks = `<p>Here is the only video of Johnathan from this location <p><iframe width="400" height="336" src="https://www.youtube-nocookie.com/embed/${allData[i].videos[0]}?playlist=${allData[i].videos.slice(1).join(',')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>`;
-        }
-        else if (allData[i].videos.length > 1) {
-          videoLinks = `<p>Here are ${allData[i].videos.length} videos (in a playlist) of Johnathan from this location <p><iframe width="400" height="336" src="https://www.youtube-nocookie.com/embed/${allData[i].videos[0]}?playlist=${allData[i].videos.slice(1).join(',')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>`;
-        }
-=======
-      for (var i = 0; i < allData.length; i++) {
-
-        var visited = allData[i].videos.length > 0;
-
-        visited ? visitedCount++ : undefined;
-
-        var icon = visited > 0 ? greenIcon : redIcon;   
-
-        var videoLinks = visited ? `<p>Here ${allData[i].videos.length === 1 ? 'is the only video' : 'are ' + allData[i].videos.length + ' videos (in a playlist)' }  of Johathan from this location!<p><p><iframe width="400" height="336" src="https://www.youtube-nocookie.com/embed/${allData[i].videos[0]}?playlist=${allData[i].videos.slice(1).join(',')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>` : '<p>Johnathan hasn\'t traveled here yet! Check back soon</p>';
-
-        // var videoLinks = allData[i].videos.map(val => `<p><iframe width="300" height="169" src="https://www.youtube-nocookie.com/embed/${val}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>`).slice(0, 3).join('');
-        // var moreVideos = `<iframe width="560" height="315" src="http://www.youtube.com/embed/${allData[i].videos[4]}?playlist=${allData[i].videos.slice(4).join(',')}" frameborder="0" allowfullscreen></iframe>`;
-        // var moreVideos = allData[i].videos.map(val => `<p><a target="_blank" href="https://www.youtube.com/watch?v=${val}">VIDEO</a><p>`).slice(3).join('');
->>>>>>> added resort visit count
-
-        // HTML popup content
-        var popupContent = '<div id="content">' +
-                   '<div id="siteNotice">' +
-                   '</div>' +
-                   `<h3 id="firstHeading" class="firstHeading">${allData[i].resortName}, ${allData[i].state}</h3>` +
-                   '<div id="bodyContent">' +
-                   videoLinks +
-                   '</div>' +
-                   '</div>';
-
-        // Popup otions for the leaflet map library
-        var popupOptions = {
-          // maxHeight: 600,
-          minWidth: 400
-        };
-
-        // Marker options
-        L.marker([allData[i].position.lat, allData[i].position.lng], {icon: icon}).addTo(mymap)
-        .bindPopup(popupContent, popupOptions)
-        .bindTooltip(allData[i].resortName);
+      // Generate the video link html
+      var videoLinks;
+      if (allData[i].videos.length === 0) {
+         videoLinks = `<p>Johnathan hasn't traveled here yet! Check back soon</p>`;
+      }
+      else if (allData[i].videos.length === 1) {
+         videoLinks = `<p>Here is the only video of Johnathan from this location <p><iframe width="400" height="336" src="https://www.youtube-nocookie.com/embed/${allData[i].videos[0]}?playlist=${allData[i].videos.slice(1).join(',')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>`;
+      }
+      else if (allData[i].videos.length > 1) {
+         videoLinks = `<p>Here are ${allData[i].videos.length} videos (in a playlist) of Johnathan from this location <p><iframe width="400" height="336" src="https://www.youtube-nocookie.com/embed/${allData[i].videos[0]}?playlist=${allData[i].videos.slice(1).join(',')}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>`;
       }
 
-<<<<<<< HEAD
+      // HTML popup content
+      var popupContent = '<div id="content">' +
+                  '<div id="siteNotice">' +
+                  '</div>' +
+                  `<h3 id="firstHeading" class="firstHeading">${allData[i].resortName}, ${allData[i].state}</h3>` +
+                  '<div id="bodyContent">' +
+                  videoLinks +
+                  '</div>' +
+                  '</div>';
+
+      // Popup otions for the leaflet map library
+      var popupOptions = {
+         // maxHeight: 600,
+         minWidth: 400
+      };
+
+      // Marker options
+      L.marker([allData[i].position.lat, allData[i].position.lng], {icon: icon}).addTo(mymap)
+      .bindPopup(popupContent, popupOptions)
+      .bindTooltip(allData[i].resortName);
+
+
       //Pans to corresponding resort
       function tableRowClick(x) {
          var clickedResortInfoArray = (x.innerText.trim()).split("	");
@@ -239,16 +222,35 @@
                // mymap.panTo(coords);
                mymap.setView(coords, 9);
 
-               //Wanted to open the narjer but it doesn't work
+               //Wanted to open the marker but it doesn't work
                //mymap.fireEvent('click', {latlng: coords});
             }
          }
       }
 
-
+<<<<<<< HEAD
 =======
-      document.getElementById("visitCount").innerText = "Johnathan has visited " + visitedCount + " out of " + allData.length + " resorts so far!"  
+      document.getElementById("visitCount").innerText = "Johnathan has visited " + visitedCount + " out of " + allData.length + " resorts so far!";
       
->>>>>>> added resort visit count
+      //Pans to corresponding resort
+      function tableRowClick(x) {
+         var clickedResortInfoArray = (x.innerText.trim()).split("	");
+         
+         for (i = 0; i < allData.length; ++i) {
+            var resort = allData[i];
+            if(resort.resortName == clickedResortInfoArray[0] && resort.region == clickedResortInfoArray[1] && resort.city == clickedResortInfoArray[3]) {
+               
+               var coords = L.latLng(resort.position.lat, resort.position.lng);
+
+               mymap.panTo(coords);
+
+               //Wanted to open the narjer but it doesn't work
+               //mymap.fireEvent('click', {latlng: coords});
+            }
+         }
+
+      }
+>>>>>>> Added panning to corresponding resort when clicking on table row
+
  </script>
 </html>
